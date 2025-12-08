@@ -39,24 +39,26 @@ export const codeReviewerAgent = new Agent({
 
       Always be helpful, specific, and provide actionable feedback.
 `,
-  model: 'google/gemini-flash-latest',
+  model: 'google/gemini-2.5-flash-lite',
   tools: { readFileTool, listFilesTool },
-  scorers: {
-    reviewQuality: {
-      scorer: scorers.reviewQualityScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-    actionability: {
-      scorer: scorers.actionabilityScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-  },
+  // Scorers disabled temporarily to avoid rate limits
+  // Uncomment and adjust sampling rate if needed
+  // scorers: {
+  //   reviewQuality: {
+  //     scorer: scorers.reviewQualityScorer,
+  //     sampling: {
+  //       type: 'ratio',
+  //       rate: 0.1, // Only 10% of requests
+  //     },
+  //   },
+  //   actionability: {
+  //     scorer: scorers.actionabilityScorer,
+  //     sampling: {
+  //       type: 'ratio',
+  //       rate: 0.1,
+  //     },
+  //   },
+  // },
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../mastra.db',

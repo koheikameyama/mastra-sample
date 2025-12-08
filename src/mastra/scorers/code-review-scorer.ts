@@ -8,7 +8,7 @@ export const reviewQualityScorer = createScorer({
     'Evaluates the quality and completeness of code review feedback',
   type: 'agent',
   judge: {
-    model: 'google/gemini-flash-latest',
+    model: 'google/gemini-2.5-flash-lite',
     instructions:
       'You are an expert evaluator of code review quality. ' +
       'Assess whether the review provides specific, actionable feedback with clear examples. ' +
@@ -81,7 +81,7 @@ export const actionabilityScorer = createScorer({
   description: 'Checks if the review provides actionable recommendations',
   type: 'agent',
   judge: {
-    model: 'google/gemini-flash-latest',
+    model: 'google/gemini-2.5-flash-lite',
     instructions:
       'You are an expert evaluator of code review actionability. ' +
       'Determine if the feedback can be immediately acted upon by a developer. ' +

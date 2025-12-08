@@ -20,31 +20,32 @@ export const weatherAgent = new Agent({
 
       Use the weatherTool to fetch current weather data.
 `,
-  model: 'google/gemini-flash-latest',
+  model: 'google/gemini-2.5-flash-lite',
   tools: { weatherTool },
-  scorers: {
-    toolCallAppropriateness: {
-      scorer: scorers.toolCallAppropriatenessScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-    completeness: {
-      scorer: scorers.completenessScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-    translation: {
-      scorer: scorers.translationScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-  },
+  // Scorers disabled temporarily to avoid rate limits
+  // scorers: {
+  //   toolCallAppropriateness: {
+  //     scorer: scorers.toolCallAppropriatenessScorer,
+  //     sampling: {
+  //       type: 'ratio',
+  //       rate: 0.1,
+  //     },
+  //   },
+  //   completeness: {
+  //     scorer: scorers.completenessScorer,
+  //     sampling: {
+  //       type: 'ratio',
+  //       rate: 0.1,
+  //     },
+  //   },
+  //   translation: {
+  //     scorer: scorers.translationScorer,
+  //     sampling: {
+  //       type: 'ratio',
+  //       rate: 0.1,
+  //     },
+  //   },
+  // },
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../mastra.db', // path is relative to the .mastra/output directory

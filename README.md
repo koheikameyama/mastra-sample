@@ -35,10 +35,10 @@ npm run dev
 
 ## 使用しているモデル
 
-- **メインエージェント**: `google/gemini-flash-latest`（無料）
-- **評価スコアラー**: `google/gemini-flash-latest`（無料）
+- **メインエージェント**: `google/gemini-2.5-flash-lite`（無料）
+- **評価スコアラー**: `google/gemini-2.5-flash-lite`（無料）
 
-Gemini Flash Latestは安定した無料枠があり、高速で効率的なモデルです。
+Gemini 2.5 Flash Liteは軽量版で、レート制限が緩く、高速で効率的なモデルです。
 
 ## 機能
 
@@ -77,11 +77,12 @@ src/mastra/
 
 Mastraは以下のモデルもサポートしています：
 
-- `google/gemini-flash-latest` - 最新のFlash版（無料・推奨）
-- `google/gemini-pro-latest` - より高性能（無料枠あり、制限付き）
-- `google/gemini-2.0-flash-lite` - 軽量版（無料）
+- `google/gemini-2.5-flash-lite` - 軽量版（無料・推奨）
+- `google/gemini-2.5-flash` - 標準版（無料だがレート制限あり）
+- `google/gemini-2.0-flash` - 前世代（無料）
 
-**推奨**: 安定した無料利用には`google/gemini-flash-latest`がおすすめです。
+**推奨**: 安定した無料利用には`google/gemini-2.5-flash-lite`がおすすめです。
+**注意**: Gemini 1.5シリーズは廃止されました。2.5以降を使用してください。
 
 **注意**: Googleは定期的にモデルを更新します。最新の利用可能なモデルは[Google AI Studio](https://ai.google.dev/gemini-api/docs/models)で確認できます。
 
