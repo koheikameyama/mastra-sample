@@ -5,12 +5,13 @@ import { LibSQLStore } from '@mastra/libsql';
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
 import { codeReviewerAgent } from './agents/code-reviewer-agent';
+import { researcherAgent } from './agents/researcher-agent';
 import { toolCallAppropriatenessScorer, completenessScorer, translationScorer } from './scorers/weather-scorer';
 import { scorers as codeReviewScorers } from './scorers/code-review-scorer';
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
-  agents: { weatherAgent, codeReviewerAgent },
+  agents: { weatherAgent, codeReviewerAgent, researcherAgent },
   scorers: {
     toolCallAppropriatenessScorer,
     completenessScorer,

@@ -1,6 +1,6 @@
-# Mastra Sample - Weather Agent with Gemini
+# Mastra Sample - AI Agents with Gemini
 
-Mastraフレームワークを使用した天気情報エージェントのサンプルプロジェクト。Google Geminiの無料APIを使用しています。
+Mastraフレームワークを使用したAIエージェントのサンプルプロジェクト。Google Geminiの無料APIとTavily検索APIを使用しています。
 
 ## セットアップ
 
@@ -11,7 +11,16 @@ Mastraフレームワークを使用した天気情報エージェントのサ�
 3. "Get API key" または "Create API key" をクリック
 4. APIキーをコピー
 
-### 2. 環境変数の設定
+### 2. Tavily API キーの取得（無料）
+
+**リサーチアシスタント機能を使用する場合のみ必要**
+
+1. [Tavily](https://tavily.com) にアクセス
+2. "Get API Key" をクリックしてアカウント作成
+3. 無料プラン（1,000リクエスト/月）を選択
+4. APIキーをコピー
+
+### 3. 環境変数の設定
 
 ```bash
 # .envファイルを作成
@@ -19,15 +28,16 @@ cp .env.example .env
 
 # .envファイルを編集してAPIキーを設定
 # GOOGLE_GENERATIVE_AI_API_KEY=your-google-api-key-here
+# TAVILY_API_KEY=your-tavily-api-key-here  # リサーチアシスタント用（オプション）
 ```
 
-### 3. 依存関係のインストール
+### 4. 依存関係のインストール
 
 ```bash
 npm install
 ```
 
-### 4. 開発サーバーの起動
+### 5. 開発サーバーの起動
 
 ```bash
 npm run dev
@@ -40,12 +50,24 @@ npm run dev
 
 Gemini 2.5 Flash Liteは軽量版で、レート制限が緩く、高速で効率的なモデルです。
 
-## 機能
+## 実装されているエージェント
 
+### 1. Weather Agent（天気エージェント）
 - 天気情報の取得
 - 場所名の自動翻訳
 - 天気に基づいたアクティビティ提案
-- AIによる応答品質の評価
+
+### 2. Code Reviewer Agent（コードレビューエージェント）
+- ファイルの読み込みとコードレビュー
+- セキュリティ脆弱性の検出
+- パフォーマンス改善提案
+- ベストプラクティスの評価
+
+### 3. Research Assistant（リサーチアシスタント）⭐新機能
+- Web検索による情報収集
+- 複数ソースからの情報統合
+- 引用付きレポート生成
+- ソースの信頼性評価
 
 ## プロジェクト構成
 

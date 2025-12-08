@@ -23,6 +23,7 @@
     "@mastra/libsql": "^0.16.3",
     "@mastra/loggers": "^0.10.19",
     "@mastra/memory": "^0.15.12",
+    "@tavily/core": "^0.5.14",
     "zod": "^4.1.13"
   },
   "devDependencies": {
