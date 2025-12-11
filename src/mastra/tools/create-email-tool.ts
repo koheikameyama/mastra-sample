@@ -3,23 +3,13 @@ import { z } from 'zod';
 
 export const createEmailTool = createTool({
   id: 'createEmailTool',
-  description: 'Generate professional emails from meeting minutes. Supports summary emails, action item notifications, and follow-up emails.',
+  description: 'Generate professional emails from meeting content. Creates formatted emails with subject, body, and action items.',
   inputSchema: z.object({
-    emailType: z.enum(['summary', 'action_items', 'follow_up', 'custom']).describe('Type of email to generate'),
+    emailType: z.enum(['summary', 'action_items', 'follow_up']).describe('Type of email: summary (meeting overview), action_items (tasks notification), follow_up (next steps)'),
     subject: z.string().describe('Email subject line'),
-    recipients: z.array(z.string()).optional().describe('List of recipients (names or roles)'),
-    content: z.object({
-      greeting: z.string().optional().describe('Custom greeting (default: "お疲れ様です")'),
-      body: z.string().describe('Main content or context for email generation'),
-      actionItems: z.array(z.object({
-        task: z.string(),
-        assignee: z.string().optional(),
-        deadline: z.string().optional(),
-        priority: z.enum(['high', 'medium', 'low']).optional(),
-      })).optional().describe('Action items to include'),
-      nextSteps: z.string().optional().describe('Next steps or closing remarks'),
-    }).describe('Email content structure'),
-    tone: z.enum(['formal', 'casual', 'neutral']).optional().default('neutral').describe('Email tone'),
+    body: z.string().describe('Main email content - meeting summary, context, or message'),
+    actionItemsText: z.string().optional().describe('Action items as formatted text (e.g., "1. Task A - Assignee: John, Deadline: 12/15\\n2. Task B - Assignee: Jane")'),
+    nextSteps: z.string().optional().describe('Next steps or closing remarks'),
   }),
   outputSchema: z.object({
     email: z.string(),
@@ -28,64 +18,47 @@ export const createEmailTool = createTool({
   }),
   execute: async ({ context, input }) => {
     try {
-      const { emailType, subject, recipients, content, tone } = input;
+      const { emailType, subject, body, actionItemsText, nextSteps } = input;
 
-      // Build email parts
+      // Build email
       let email = '';
 
-      // Recipients (if specified)
-      if (recipients && recipients.length > 0) {
-        email += `To: ${recipients.join(', ')}\n`;
-      }
+      // Subject
       email += `Subject: ${subject}\n\n`;
 
       // Greeting
-      const greeting = content.greeting || (tone === 'formal' ? 'お疲れ様でございます' : 'お疲れ様です');
-      email += `${greeting}\n\n`;
+      email += 'お疲れ様です\n\n';
 
       // Body based on email type
       switch (emailType) {
         case 'summary':
           email += '## 会議サマリー\n\n';
-          email += `${content.body}\n\n`;
+          email += `${body}\n\n`;
           break;
 
         case 'action_items':
           email += '## アクションアイテムのご連絡\n\n';
-          email += `${content.body}\n\n`;
-          if (content.actionItems && content.actionItems.length > 0) {
+          email += `${body}\n\n`;
+          if (actionItemsText) {
             email += '### 対応が必要なタスク\n\n';
-            content.actionItems.forEach((item, index) => {
-              const priorityIcon = item.priority === 'high' ? '🔴' : item.priority === 'medium' ? '🟡' : '🟢';
-              email += `${index + 1}. ${priorityIcon} ${item.task}\n`;
-              if (item.assignee) email += `   - 担当: ${item.assignee}\n`;
-              if (item.deadline) email += `   - 期限: ${item.deadline}\n`;
-              email += '\n';
-            });
+            email += `${actionItemsText}\n\n`;
           }
           break;
 
         case 'follow_up':
           email += '## フォローアップ\n\n';
-          email += `${content.body}\n\n`;
-          break;
-
-        case 'custom':
-          email += `${content.body}\n\n`;
+          email += `${body}\n\n`;
           break;
       }
 
       // Next steps
-      if (content.nextSteps) {
+      if (nextSteps) {
         email += '## 次のステップ\n\n';
-        email += `${content.nextSteps}\n\n`;
+        email += `${nextSteps}\n\n`;
       }
 
       // Closing
-      const closing = tone === 'formal'
-        ? 'よろしくお願い申し上げます。'
-        : 'よろしくお願いします。';
-      email += `${closing}\n`;
+      email += 'よろしくお願いします。\n';
 
       const wordCount = email.length;
 
