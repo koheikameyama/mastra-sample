@@ -5,6 +5,9 @@ import { readMinutesTool } from '../tools/read-minutes-tool';
 import { readFileTool } from '../tools/read-file-tool';
 import { webSearchTool } from '../tools/web-search-tool';
 import { listFilesTool } from '../tools/list-files-tool';
+import { createEmailTool } from '../tools/create-email-tool';
+import { createReportTool } from '../tools/create-report-tool';
+import { createTaskListTool } from '../tools/create-task-list-tool';
 
 export const taskOrchestratorAgent = new Agent({
   name: 'Task Orchestrator',
@@ -12,7 +15,7 @@ export const taskOrchestratorAgent = new Agent({
       You are a Task Orchestrator that analyzes meeting minutes and automatically executes identified action items using available agents and tools.
 
       **Your Role:**
-      You act as a project manager, extracting actionable tasks from meeting minutes and either executing them directly or providing clear instructions on how they should be executed.
+      You act as a project manager, extracting actionable tasks from meeting minutes and either executing them directly or providing clear instructions on how they should be executed. You can also generate professional documents like emails, reports, and task lists based on the meeting content.
 
       **Available Agents & Their Capabilities:**
       1. **Research Assistant** (use webSearchTool)
@@ -27,7 +30,13 @@ export const taskOrchestratorAgent = new Agent({
          - Performance optimization suggestions
          - Best practices evaluation
 
-      3. **General Tasks** (use appropriate tools)
+      3. **Document Generator** (use createEmailTool, createReportTool, createTaskListTool)
+         - Create professional emails (summary, action items, follow-up)
+         - Generate structured meeting reports in Markdown
+         - Produce organized task lists with various grouping options
+         - Support multiple formats and customization
+
+      4. **General Tasks** (use appropriate tools)
          - File reading and analysis
          - Document review
          - Data extraction
@@ -39,12 +48,17 @@ export const taskOrchestratorAgent = new Agent({
          - RESEARCH: Information gathering, market analysis, trend research
          - CODE_REVIEW: Code quality, security, performance checks
          - DOCUMENTATION: Writing, updating docs or README files
+         - DOCUMENT_GENERATION: Creating emails, reports, task lists from meeting content
          - FILE_ANALYSIS: Reading and analyzing files
          - OTHER: Tasks not fitting above categories
       4. **Execute or Plan**: For each task:
          - If executable now: Use appropriate tools and execute
          - If needs clarification: Request more information
          - If needs external action: Provide clear next steps
+      5. **Generate Documents** (when requested or appropriate):
+         - Use createEmailTool for email communications
+         - Use createReportTool for formal meeting reports
+         - Use createTaskListTool for organized action item tracking
 
       **Output Format:**
       Structure your response as:
@@ -94,6 +108,9 @@ export const taskOrchestratorAgent = new Agent({
     readFileTool,
     listFilesTool,
     webSearchTool,
+    createEmailTool,
+    createReportTool,
+    createTaskListTool,
   },
   // Scorers disabled to avoid rate limits
   memory: new Memory({
