@@ -25,37 +25,37 @@ export const readMinutesTool = createTool({
     source: z.string(),
     lineCount: z.number(),
   }),
-  execute: async ({ context, input }) => {
+  execute: async ({ context }) => {
     try {
       let content: string;
       let source: string;
 
-      if (input.source === 'file') {
-        if (!input.filePath) {
+      if (context.source === 'file') {
+        if (!context.filePath) {
           throw new Error('filePath is required when source is "file"');
         }
 
         let fullPath: string;
 
         // 絶対パスの場合はそのまま使用
-        if (isAbsolute(input.filePath)) {
-          fullPath = input.filePath;
+        if (isAbsolute(context.filePath)) {
+          fullPath = context.filePath;
         } else {
           // 相対パスの場合はプロジェクトルートから解決
           const projectRoot = findProjectRoot();
-          fullPath = join(projectRoot, input.filePath);
+          fullPath = join(projectRoot, context.filePath);
         }
 
         // ファイルの存在確認
         await access(fullPath);
         content = await readFile(fullPath, 'utf-8');
-        source = `file: ${input.filePath}`;
+        source = `file: ${context.filePath}`;
       } else {
         // テキスト入力の場合
-        if (!input.text) {
+        if (!context.text) {
           throw new Error('text is required when source is "text"');
         }
-        content = input.text;
+        content = context.text;
         source = 'direct text input';
       }
 

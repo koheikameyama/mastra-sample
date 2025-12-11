@@ -30,17 +30,17 @@ export const listFilesTool = createTool({
     files: z.array(z.string()),
     count: z.number(),
   }),
-  execute: async ({ context, input }) => {
+  execute: async ({ context }) => {
     try {
       let fullPath: string;
 
       // 絶対パスの場合はそのまま使用
-      if (isAbsolute(input.directory)) {
-        fullPath = input.directory;
+      if (isAbsolute(context.directory)) {
+        fullPath = context.directory;
       } else {
         // 相対パスの場合はプロジェクトルートから解決
         const projectRoot = findProjectRoot();
-        fullPath = join(projectRoot, input.directory);
+        fullPath = join(projectRoot, context.directory);
       }
 
       // ディレクトリの存在確認
@@ -50,12 +50,12 @@ export const listFilesTool = createTool({
 
       let files = entries
         .filter((entry) => entry.isFile())
-        .map((entry) => join(input.directory, entry.name));
+        .map((entry) => join(context.directory, entry.name));
 
       // 拡張子でフィルタ
-      if (input.extension) {
+      if (context.extension) {
         files = files.filter((file) =>
-          file.endsWith(`.${input.extension}`)
+          file.endsWith(`.${context.extension}`)
         );
       }
 
@@ -65,7 +65,7 @@ export const listFilesTool = createTool({
       };
     } catch (error) {
       throw new Error(
-        `Failed to list files in "${input.directory}": ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to list files in "${context.directory}": ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
   },

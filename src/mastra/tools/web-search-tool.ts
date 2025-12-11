@@ -22,7 +22,7 @@ export const webSearchTool = createTool({
     query: z.string(),
     answer: z.string().optional(),
   }),
-  execute: async ({ context, input }) => {
+  execute: async ({ context }) => {
     try {
       const apiKey = process.env.TAVILY_API_KEY;
 
@@ -35,9 +35,9 @@ export const webSearchTool = createTool({
 
       const tvly = tavily({ apiKey });
 
-      const response = await tvly.search(input.query, {
-        maxResults: Math.min(input.maxResults || 5, 10),
-        searchDepth: input.searchDepth || 'basic',
+      const response = await tvly.search(context.query, {
+        maxResults: Math.min(context.maxResults || 5, 10),
+        searchDepth: context.searchDepth || 'basic',
         includeAnswer: true,
         includeRawContent: false,
       });
@@ -49,7 +49,7 @@ export const webSearchTool = createTool({
           content: result.content || '',
           score: result.score,
         })),
-        query: input.query,
+        query: context.query,
         answer: response.answer,
       };
     } catch (error) {

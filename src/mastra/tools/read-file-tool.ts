@@ -24,17 +24,17 @@ export const readFileTool = createTool({
     lines: z.number(),
     extension: z.string(),
   }),
-  execute: async ({ context, input }) => {
+  execute: async ({ context }) => {
     try {
       let fullPath: string;
 
       // 絶対パスの場合はそのまま使用
-      if (isAbsolute(input.filePath)) {
-        fullPath = input.filePath;
+      if (isAbsolute(context.filePath)) {
+        fullPath = context.filePath;
       } else {
         // 相対パスの場合はプロジェクトルートから解決
         const projectRoot = findProjectRoot();
-        fullPath = join(projectRoot, input.filePath);
+        fullPath = join(projectRoot, context.filePath);
       }
 
       // ファイルの存在確認
@@ -42,7 +42,7 @@ export const readFileTool = createTool({
 
       const content = await readFile(fullPath, 'utf-8');
       const lines = content.split('\n').length;
-      const extension = input.filePath.split('.').pop() || '';
+      const extension = context.filePath.split('.').pop() || '';
 
       return {
         content,
@@ -51,7 +51,7 @@ export const readFileTool = createTool({
       };
     } catch (error) {
       throw new Error(
-        `Failed to read file "${input.filePath}": ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to read file "${context.filePath}": ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
   },
